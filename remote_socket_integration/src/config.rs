@@ -61,6 +61,47 @@ impl Configuration {
 	}
 }
 
+pub fn get_configuration() -> Configuration {
+	let config_path1 = std::env::current_exe().unwrap().parent().unwrap().join("config");
+
+	let (portname, baudrate, devices) = get_device_config_from_file(config_path1.clone());
+	let (brokeraddress, brokerport, brokeruser, brokerpassword) = get_broker_config_from_file(config_path1);
+	
+	let port = serialport::new(portname, baudrate)
+    .open().unwrap();
+    let port_arc = Arc::new(Mutex::new(port));
+    
+	Configuration {port: port_arc, devices,
+		brokeraddress, brokerport, brokeruser, brokerpassword}
+}
+
+fn get_device_config_from_file(config_path: std::path::PathBuf) -> (String, u32, Vec<remote_socket::RemoteSocket>) {
+	let contents = fs::read_to_string(config_path)
+        .expect("Something went wrong reading the file");
+        
+    let json_v: Value = serde_json::from_str(contents.as_str()).unwrap();
+    
+    let port = json_v["serialport"].as_str().unwrap();
+	let baudrate = json_v["baudrate"].as_u64().unwrap() as u32;
+	let mut devices = Vec::new();
+    
+    for dev in json_v["devices"].as_array().unwrap() {
+    	if dev["type"] == "switch" {
+    		let name = dev["name"].as_str().unwrap();
+    		let manufacturer = dev["manufacturer"].as_str().unwrap();
+    		let model = dev["model"].as_str().unwrap();
+    		let remote = dev["remote"].as_u64().unwrap() as usize;
+    		let device = dev["device"].as_u64().unwrap() as usize;
+    	
+    		devices.push(remote_socket::RemoteSocket {name: name.to_string(),
+										  manufacturer: manufacturer.to_string(),
+										  model: model.to_string(), device, remote});
+    	}
+    }
+														  
+	(port.to_string(), baudrate, devices)
+}
+
 fn get_broker_config_from_file(config_path: std::path::PathBuf) -> (String, u16, String, String) {
 	let contents = fs::read_to_string(config_path)
         .expect("Something went wrong reading the file");
