@@ -1,7 +1,18 @@
 use crate::config::Configuration;
+use crate::devices::remote_socket;
+use rumqtt::{MqttClient, QoS};
 
 pub fn announce_from_config(conf: &Configuration) {
+	let devices = conf.get_devices();
 	
+	let (mut mqtt_client, _) = MqttClient::start(conf.get_mqtt_options()).unwrap();
+	
+	for dev in devices.iter() {
+		let path = create_mqtt_path(dev);
+		let message = create_mqtt_string(dev);
+		
+		mqtt_client.publish(path, QoS::AtLeastOnce, false, message).unwrap();
+	}
 }
 
 fn create_mqtt_string(dev: &remote_socket::RemoteSocket) -> String{
