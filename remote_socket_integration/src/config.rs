@@ -60,3 +60,17 @@ impl Configuration {
 		self.port.clone()
 	}
 }
+
+fn get_broker_config_from_file(config_path: std::path::PathBuf) -> (String, u16, String, String) {
+	let contents = fs::read_to_string(config_path)
+        .expect("Something went wrong reading the file");
+        
+    let json_v: Value = serde_json::from_str(contents.as_str()).unwrap();
+    
+    let broker = json_v["broker"].as_str().unwrap();
+	let brokerport = json_v["brokerport"].as_u64().unwrap() as u16;
+    let brokeruser = json_v["brokeruser"].as_str().unwrap();
+    let brokerpassword = json_v["brokerpassword"].as_str().unwrap();
+														  
+	(broker.to_string(), brokerport, brokeruser.to_string(), brokerpassword.to_string())
+}
