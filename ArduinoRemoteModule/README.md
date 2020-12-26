@@ -12,6 +12,6 @@ SilvercrestCodes
 
 This library implements the rolling code of Silvercrest 60494 remote switches.
 <br>
-<br>![Arduino_Mega_433Mhz_transmitter](https://raw.githubusercontent.com/cadivus/remote-socket-integration-for-MQTT-and-HomeAssistant/main/doc/images/Silvercrest_60494.png?raw=true)<br>
+<br><img src="https://raw.githubusercontent.com/cadivus/remote-socket-integration-for-MQTT-and-HomeAssistant/main/doc/images/Silvercrest_60494.png?raw=true" width="50%"><br>
 <br>
 By passing the remote, the switch and the state, this library returns the next code to send. All counters start at zero.
