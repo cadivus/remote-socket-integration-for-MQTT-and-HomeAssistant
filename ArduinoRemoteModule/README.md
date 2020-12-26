@@ -8,7 +8,7 @@ The name of the remote socket is not needed, but the other information.
 After getting the information, this Arduino-sketch looks up the remote codes using the SilvercrestCodes library and sends it using RCSwitch (https://github.com/sui77/rc-switch). All counter start at zero.
 
 
-SilvercrestCodes
+## SilvercrestCodes
 
 This library implements the rolling code of Silvercrest 60494 remote switches.
 <br>
