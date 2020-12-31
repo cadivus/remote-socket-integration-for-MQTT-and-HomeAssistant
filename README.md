@@ -21,7 +21,7 @@ The configuration is written in JSON and looks like this:
     "brokeruser": "username",
     "brokerpassword": "password",
     "devices": [{"type":"switch","name":"Remoteswitch1","manufacturer":"Silvercrest","model":"60494","remote":0,"device":0},
-    			{"type":"switch","name":"Remoteswitch1","manufacturer":"Silvercrest","model":"60494","remote":0,"device":1}]
+    			{"type":"switch","name":"Remoteswitch2","manufacturer":"Silvercrest","model":"60494","remote":0,"device":1}]
 }
 ```
 "remote" is the remote control being emulated and "device" specifies the keys of the remote.
